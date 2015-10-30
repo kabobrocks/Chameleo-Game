@@ -3,6 +3,7 @@
 //================================================================================
 
 function setupPhysics() {
+
 	//start physics system and enable "expensive" collision events
 	game.physics.startSystem(Phaser.Physics.P2JS);
 	game.physics.p2.setImpactEvents(true);
@@ -22,27 +23,33 @@ function setupPhysics() {
 	game.physics.p2.createContactMaterial(playerMaterial, groundMaterial, { friction: 2, restitution: 0 });
     game.physics.p2.createContactMaterial(iceMaterial, groundMaterial, { friction: 0, restitution: 0 });
 
-	//define collisiongroups
-	playerCG = game.physics.p2.createCollisionGroup();
-	groundCG = game.physics.p2.createCollisionGroup();
-	levelEndCG = game.physics.p2.createCollisionGroup(); //need to add the rules for it in Objects.js
-	questionmarkCG = game.physics.p2.createCollisionGroup();
-	computerAICG = game.physics.p2.createCollisionGroup(); //the scary pirate ghost guys
-	keyCG = game.physics.p2.createCollisionGroup(); //keys that you can pick up
-	secretWallCG = game.physics.p2.createCollisionGroup(); //wall to be destroyed if you know all secrets
-	goalCG = game.physics.p2.createCollisionGroup(); // the normal goal
-	secretGoalCG = game.physics.p2.createCollisionGroup(); //the secret goal
-	playerCG = game.physics.p2.createCollisionGroup();
+	//define collisiongroups===============================================================
+    //player
+    playerCG = game.physics.p2.createCollisionGroup();
+    fireballCG = game.physics.p2.createCollisionGroup();
+    
+    //level
+    groundCG = game.physics.p2.createCollisionGroup();
+    levelEndCG = game.physics.p2.createCollisionGroup(); //need to add the rules for it in Objects.js
+    platformCG = game.physics.p2.createCollisionGroup();
+
+    //objects
+    questionmarkCG = game.physics.p2.createCollisionGroup();
+    powerupsCG = game.physics.p2.createCollisionGroup();
+    computerAICG = game.physics.p2.createCollisionGroup(); //the scary pirate ghost guys
+    keyCG = game.physics.p2.createCollisionGroup(); //keys that you can pick up
+    secretWallCG = game.physics.p2.createCollisionGroup(); //wall to be destroyed if you know all secrets
+    goalCG = game.physics.p2.createCollisionGroup(); // the normal goal
+    secretGoalCG = game.physics.p2.createCollisionGroup(); //the secret goal
+    
+    //enemies
     enemyAirCG = game.physics.p2.createCollisionGroup();
     enemyGroundCG = game.physics.p2.createCollisionGroup();
     enemyStaticCG = game.physics.p2.createCollisionGroup();
     enemyboundsCG = game.physics.p2.createCollisionGroup();
-    groundCG = game.physics.p2.createCollisionGroup();
-    platformCG = game.physics.p2.createCollisionGroup();
-    fireballCG = game.physics.p2.createCollisionGroup();
-    questionmarkCG = game.physics.p2.createCollisionGroup();
-    powerupsCG = game.physics.p2.createCollisionGroup();
-    finishlineCG = game.physics.p2.createCollisionGroup();
+
+
+   
 
 	//prevent rightclick contextmenu
 	game.canvas.oncontextmenu = function (e) {	e.preventDefault();	};

@@ -25,12 +25,11 @@ function createDoorKeyUI (currentState) {
 // CREATE OBJECTS
 //================================================================================
 function createObjects(currentState){
-	//empty for now, need to fill when we add new objects, such as coins, powerups, keys, etc.
-	createUI(currentState);
+    //empty for now, need to fill when we add new objects, such as coins, powerups, keys, etc.
+    createUI(currentState);
     createDoorKeyUI(currentState);
 
     //coins objects is all doors
-
 
     // if coins is currently in the local storage, overwrite coins from the line below with what is in the localstorage
     //coins = localstorage.getItem('coins'); //JSON string
@@ -65,6 +64,11 @@ function createObjects(currentState){
     map.createFromObjects('objects', 209, 'secretGoal', 1, true, false, secretGoal);
     secretGoal.forEach(ApplySecretGoalSprite, this);
     gameObjects.add(secretGoal);
+
+    powerups = game.add.group();
+    map.createFromObjects('objects', 79, 'powerup1', 1, true, false, powerups);
+    powerups.forEach(ApplyPowerupSprite, this);
+    gameObjects.add(powerups);
 }
 
 function DoorIt(door){
@@ -150,6 +154,17 @@ function ApplySecretGoalSprite(secretGoal) {
     secretGoal.body.setMaterial(groundMaterial);
 }
 
+function ApplyPowerupSprite(powerup) {
+    game.physics.p2.enable(powerup);
+    powerup.body.y += 32;  //since we are replacing a 32x32 tile with a 64x64 object we need to adjust
+    powerup.body.x += 32;
+    powerup.body.static = true;
+    powerup.body.sprite.name = "powerup1";
+    powerup.body.setCollisionGroup(powerupsCG);
+    powerup.body.collides([playerCG]);
+    powerup.body.setMaterial(groundMaterial);
+}
+
 //================================================================================
 // Player Interactions with Objects
 //================================================================================
@@ -208,6 +223,12 @@ function collectSecretGoal(player, secretGoal) {
     game.state.start("secret-win");
 }
 
+function collectPowerup(player, powerup) {
+    powerup = true;
+    setupPlayerLooks(player.sprite, 'pirateBlue');
+
+}
+
 function interactSecretWall(player, secretWall) {
         answer = prompt("Enter the password using all 3 hints. No Spaces!");
         if (answer.toUpperCase() == "GIMMESKELLYTREASURE") {
@@ -222,7 +243,7 @@ function interactSecretWall(player, secretWall) {
 //================================================================================
 function createChainElement(chainSection, chainLength) {
     if(docked == true) {
-    	return;
+        return;
     }
     var x = player.body.x;
     var y = player.body.y;
@@ -257,10 +278,10 @@ function createChainElement(chainSection, chainLength) {
             
     }
     if (chainSectionCount % 2 == 1) {
-    	lastElement.bringToTop();
+        lastElement.bringToTop();
     }
     if (lastElement) { 
-    	constraints.push(game.physics.p2.createRevoluteConstraint(newElement, [0, -8], lastElement, [0, 8], maxForce));
+        constraints.push(game.physics.p2.createRevoluteConstraint(newElement, [0, -8], lastElement, [0, 8], maxForce));
     }  
     if (chainSection == chainLength) { // if lastRopeSection > anchor Player
         constraints.push(game.physics.p2.createRevoluteConstraint( newElement, [0, 8], player, [0, 8], maxForce)); 

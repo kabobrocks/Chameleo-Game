@@ -45,10 +45,8 @@ var Level1 = {
 
 		//where are we placing the player?
 		if (localStorage.getItem('playerX') != null) {
-			console.log("hello");
 			setupPlayer(localStorage.getItem('playerX'), localStorage.getItem('playerY'));
 		} else {
-			console.log("hi");
 			setupPlayer(50, 50);	
 		}
 		

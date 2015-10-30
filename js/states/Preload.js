@@ -12,12 +12,13 @@ var PreloadState = {
 
 		//load all of the spritesheets
 		game.load.spritesheet('questionmark', 'assets/door.png', 64, 64);
+		game.load.spritesheet('pirateSpriteSheet', 'assets/pirateSpritesheet.png', 64, 64);
+		game.load.spritesheet('pirateBlue', 'assets/pirateSpritesheet02.png', 64, 64);
 		//game.load.spritesheet('skellies', 'assets/skellies.png', 64, 64);
 
 		//load all of the images
 		game.load.image('door', 'assets/door.png');
 		game.load.image('pirate','assets/pirate.png');
-		game.load.spritesheet('pirateSpriteSheet', 'assets/pirateSpritesheet.png', 64, 64);
 		game.load.image('doorkey', 'assets/doorkey.png');
 		game.load.image('lifesaver', 'assets/lifesaver.png');
 		game.load.image('chest', 'assets/chest.png');
@@ -30,6 +31,8 @@ var PreloadState = {
 		game.load.image('ending1', 'assets/ending1.jpg');
 		game.load.image('ending2', 'assets/ending2.jpg');
 
+		//loading powerup
+		game.load.image('powerup1', 'assets/powerup.png');
 
 		//loading the hint scrolls
 		game.load.image('scroll1a', 'assets/scroll1a.png');

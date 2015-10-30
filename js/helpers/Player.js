@@ -3,8 +3,9 @@
 //================================================================================
 
 function setupPlayer(playerX, playerY) {
-    if (player_health == 3) { //change the sprite if you are at full health
-        player = game.add.sprite(playerX, playerY, 'pirateSpriteSheet'); 
+    if (powerup == true) { //change the sprite if you are at full health
+        player = game.add.sprite(playerX, playerY, 'pirateBlue'); 
+        console.log('blue');
     }
     else { //normal sprite 
         player = game.add.sprite(playerX, playerY, 'pirateSpriteSheet');
@@ -20,13 +21,29 @@ function setupPlayer(playerX, playerY) {
     player.body.allowSleep = true; 
     player.body.setCollisionGroup(playerCG);
     player.body.setMaterial(playerMaterial);
-    player.body.collides([groundCG, levelEndCG, questionmarkCG, computerAICG, keyCG, secretWallCG, goalCG, secretGoalCG]); //what is the player going to interact with
+
+    //collisions
+    collidableObjects = [
+        groundCG,
+        levelEndCG,
+        questionmarkCG,
+        computerAICG,
+        keyCG,
+        secretWallCG,
+        goalCG,
+        secretGoalCG,
+        powerupsCG
+    ];
+    player.body.collides(collidableObjects); //what is the player going to interact with
+    
+    //groupCallbacks
     player.body.createGroupCallback(questionmarkCG, hitQuestionmark);
     player.body.createGroupCallback(computerAICG, interactWithNPC);
     player.body.createGroupCallback(keyCG, pickupKey);
     player.body.createGroupCallback(goalCG, collectGoal);
     player.body.createGroupCallback(secretGoalCG, collectSecretGoal);
     player.body.createGroupCallback(secretWallCG, interactSecretWall);
+    player.body.createGroupCallback(powerupsCG, collectPowerup);
     //player.body.createGroupCallback(levelEndCG, finishLevel); //when the player interacts with a collision group, what happens?
 
     setupPlayerLooks(player);
@@ -42,9 +59,9 @@ function setupPlayer(playerX, playerY) {
 //================================================================================
 // SET PLAYER ANIMATIONS AND LOOKS
 //================================================================================
-function setupPlayerLooks(player, color){
-    if (color) { //set color of the sprite if it is set
-        player.loadTexture(color,5);
+function setupPlayerLooks(player, newSpriteSheet){
+    if (newSpriteSheet) { //set color of the sprite if it is set
+        player.loadTexture(newSpriteSheet,2);
     }
 
     player.animations.add('walk', [0,1,2,3,4,5,6], 8, true);
