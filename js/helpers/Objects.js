@@ -231,12 +231,12 @@ function collectPowerup(player, powerup) {
         powerupstat = true;
         setupPlayerLooks(player.sprite, 'pirateBlue');
 
+        //create a 5 second timer to be the blue pirate, run endPowerup after timer is done
         game.time.events.add(Phaser.Timer.SECOND * 5, endPowerup, this);
 
         function endPowerup() {
-            console.log("all done!");
-            setupPlayerLooks(player.sprite, 'pirateSpriteSheet');
             powerupstat = false;
+            setupPlayerLooks(player.sprite, 'pirateSpriteSheet');
         }
     }
 
