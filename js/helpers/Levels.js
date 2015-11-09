@@ -33,13 +33,13 @@ function setupLayers(layerObjectsMaterial, mainLayerMaterial) {
 
 	for (i = 0; i < layerObjects_tiles.length; i++) {
 		layerObjects_tiles[i].setCollisionGroup(groundCG);		  //what kind of group are we assigning this to?
-		layerObjects_tiles[i].collides([playerCG, powerupsCG]);   //what items will be colliding with this group?
+		layerObjects_tiles[i].collides([playerCG, powerupsCG, blueplayerCG]);   //what items will be colliding with this group?
 		layerObjects_tiles[i].setMaterial(layerObjectsMaterial);  //what material is this made of? Important, as it sets friction, among other things.
 	}
 
 	for (i = 0; i < layerMain_tiles.length; i++) {
 		layerMain_tiles[i].setCollisionGroup(groundCG);
-		layerMain_tiles[i].collides([playerCG]);
+		layerMain_tiles[i].collides([playerCG, blueplayerCG]);
 		layerMain_tiles[i].setMaterial(groundMaterial);
 	}
 }

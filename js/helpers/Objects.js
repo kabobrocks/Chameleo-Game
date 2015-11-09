@@ -161,7 +161,7 @@ function ApplyPowerupSprite(powerup) {
     powerup.body.static = true;
     powerup.body.sprite.name = "powerup1";
     powerup.body.setCollisionGroup(powerupsCG);
-    powerup.body.collides([playerCG]);
+    powerup.body.collides([playerCG, blueplayerCG]);
     powerup.body.setMaterial(groundMaterial);
 }
 
@@ -224,8 +224,21 @@ function collectSecretGoal(player, secretGoal) {
 }
 
 function collectPowerup(player, powerup) {
-    powerup = true;
-    setupPlayerLooks(player.sprite, 'pirateBlue');
+    if (powerupstat == true) {
+        powerupstat = false;
+        setupPlayerLooks(player.sprite, 'pirateSpriteSheet');
+    } else {
+        powerupstat = true;
+        setupPlayerLooks(player.sprite, 'pirateBlue');
+
+        game.time.events.add(Phaser.Timer.SECOND * 5, endPowerup, this);
+
+        function endPowerup() {
+            console.log("all done!");
+            setupPlayerLooks(player.sprite, 'pirateSpriteSheet');
+            powerupstat = false;
+        }
+    }
 
 }
 
