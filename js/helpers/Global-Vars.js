@@ -98,6 +98,7 @@ var chainMaxLength = 550;
 var sword;
 var gun1;
 var powerup = false;
+var powerupstat = false;
 var bullet;
 var finishline;
 var gameObjects;

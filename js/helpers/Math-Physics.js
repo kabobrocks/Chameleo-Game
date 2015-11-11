@@ -26,6 +26,7 @@ function setupPhysics() {
 	//define collisiongroups===============================================================
     //player
     playerCG = game.physics.p2.createCollisionGroup();
+    blueplayerCG = game.physics.p2.createCollisionGroup();
     fireballCG = game.physics.p2.createCollisionGroup();
     
     //level

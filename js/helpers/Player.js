@@ -4,7 +4,7 @@
 
 function setupPlayer(playerX, playerY) {
     if (powerup == true) { //change the sprite if you are at full health
-        player = game.add.sprite(playerX, playerY, 'pirateBlue'); 
+        player = game.add.sprite(playerX, playerY, 'pirateBlue');
         console.log('blue');
     }
     else { //normal sprite 
@@ -62,6 +62,12 @@ function setupPlayer(playerX, playerY) {
 function setupPlayerLooks(player, newSpriteSheet){
     if (newSpriteSheet) { //set color of the sprite if it is set
         player.loadTexture(newSpriteSheet,2);
+    }
+
+    if (newSpriteSheet == 'pirateBlue') {
+        player.body.setCollisionGroup(blueplayerCG);
+    } else {
+        player.body.setCollisionGroup(playerCG);
     }
 
     player.animations.add('walk', [0,1,2,3,4,5,6], 8, true);
