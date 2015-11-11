@@ -69,6 +69,11 @@ function createObjects(currentState){
     map.createFromObjects('objects', 79, 'powerup1', 1, true, false, powerups);
     powerups.forEach(ApplyPowerupSprite, this);
     gameObjects.add(powerups);
+
+    chains = game.add.group();
+    map.createFromObjects('objects', 295, 'chain', 0, false, false, chains);   //this first chain element is set to exists=false because its just there to get the position and the length out ouf tiled editor
+    chains.forEach(setupChains, this);
+    gameObjects.add(chains);
 }
 
 function DoorIt(door){
@@ -163,6 +168,107 @@ function ApplyPowerupSprite(powerup) {
     powerup.body.setCollisionGroup(powerupsCG);
     powerup.body.collides([playerCG, blueplayerCG]);
     powerup.body.setMaterial(groundMaterial);
+}
+
+function setupChains(chain){
+    createChain(chain.length,chain.x+16,chain.y);
+}
+
+function createChain(length, xAnchor,yAnchor){
+    var lastRect;  //if we created our first rect this will contain it
+    var height = 20;  //height for the physics body - your image height is 8px
+    var width = 16;   //this is the width for the physics body.. if to small the rectangles will get scrambled together
+    var maxForce =15000;  //the force that holds the rectangles together
+    for(var i=0; i<=length; i++){
+        var x = xAnchor;                 // all rects are on the same x position
+        var y = yAnchor+(i*height);   // every new rects is positioned below the last
+        if (i % 2 == 0){
+            newRect = chains.create(x, y, 'chain',1);
+        }   //add sprite
+        else {
+            newRect = chains.create(x, y, 'chain',0); 
+            lastRect.bringToTop();
+        }
+        newRect.name = 'chainElement';
+        game.physics.p2.enable(newRect,false);      // enable physicsbody
+        newRect.body.setRectangle(width,height);    //set custom rectangle
+        newRect.body.data.shapes[0].sensor = true  // make the chain elements to sensors (no actual collision but collision events)
+        //if (i % 2 == 1){  // less collsion bodies to calculate and the first one is fixed
+            newRect.body.setCollisionGroup(groundCG);
+            newRect.body.collides([playerCG,fireballCG,groundCG]);
+            newRect.body.onBeginContact.add(chainCollision,newRect);  // call chaincollision function to start "hangmode"
+        //}
+        if (i == 0){
+            newRect.body.static=true;   //anchor the first one created
+//          newRect.body.kinematic=true;
+        }
+        else{
+            newRect.body.mass =  length/i;  // reduce mass for evey chain element
+        }
+        //after the first rectangle is created we can add the constraint
+        if(lastRect){
+            game.physics.p2.createRevoluteConstraint(newRect, [0,-10], lastRect, [0,10], maxForce);
+        }
+        lastRect = newRect;
+    }; 
+}
+
+function chainCollision(body){
+    if (body.sprite.name == 'pirate' && hanging== false && hangTimer < game.time.now && docked == false) {   //if the hit body is a sprite and belongs to enemies
+        chainElement = this;   // we send newRect instead of this in the onBeginContact function and here the chain element is accessable as this
+        chainElement.body.velocity.x=body.velocity.x*-50;  //on collision we need an initial drive for more realistic action
+        hanging = true;
+        playerChainRC = game.physics.p2.createRevoluteConstraint(chainElement, [0,0],player, [0,8], 10000)
+        player.body.data.gravityScale=0;
+    }
+} 
+
+function createChainElement(chainSection, chainLength){
+    console.log('createChainElement');
+    if(docked == true ){return}
+    var x=player.body.x;
+    var y=player.body.y;
+    var height = 20;  //height for the physics body - your image height is 8px
+    var width = 16;   //this is the width for the physics body.. if to small the rectangles will get scrambled together
+    var maxForce =100000;  //the force that holds the rectangles together
+    if (chainSection == 0) { // first chainSection
+        newElement = anchorgroup.create(x, y, 'chain',3);
+        game.physics.p2.enable(newElement,false);
+        newElement.body.setRectangle(width,height);
+        newElement.body.angle=sensorAngle+90;  //+90
+        newElement.body.mass =  chainLength;
+        newElement.body.angularDamping=1;
+        newElement.body.data.gravityScale=0;
+        newElement.body.data.shapes[0].sensor = false;
+        newElement.body.setCollisionGroup(fireballCG);
+        newElement.body.collides([groundCG,questionmarkCG]);
+        newElement.body.createGroupCallback(groundCG, anchorCollision, this);
+        newElement.body.createGroupCallback(questionmarkCG, anchorCollision, this);
+        chainAnchor = newElement;
+        accelerate = true; 
+    }
+    else{
+        newElement = anchorgroup.create(x, y, 'chain',1); 
+        newElement.scale.setTo(0.6,1);
+        game.physics.p2.enable(newElement,false);
+        newElement.body.setRectangle(width,height);
+        newElement.body.angle=sensorAngle+90;
+        newElement.body.mass =  chainLength/chainSectionCount;  // this reduces the mass of every new ropeelement (it stops the rope from beeing pulled apart but it introduces other obstacles) 
+        newElement.body.data.gravityScale=0;
+        newElement.body.data.shapes[0].sensor = true;
+        chainAnchor = newElement;
+            
+    }
+    if (chainSectionCount % 2 == 1)  {lastElement.bringToTop();}
+    if (lastElement) {  constraints.push(game.physics.p2.createRevoluteConstraint(newElement, [0,-8], lastElement, [0,8], maxForce) ); }  
+    if (chainSection == chainLength) { // if lastRopeSection > anchor Player
+        constraints.push(game.physics.p2.createRevoluteConstraint( newElement, [0,8],player, [0,8], maxForce) ); 
+        docked = true;
+    }
+    lastElement = newElement;
+    player.bringToTop();
+    layerforeground.bringToTop(); 
+    chainSectionCount++;
 }
 
 //================================================================================

@@ -14,6 +14,7 @@ var PreloadState = {
 		game.load.spritesheet('questionmark', 'assets/door.png', 64, 64);
 		game.load.spritesheet('pirateSpriteSheet', 'assets/pirateSpritesheet.png', 64, 64);
 		game.load.spritesheet('pirateBlue', 'assets/pirateSpritesheet02.png', 64, 64);
+		game.load.spritesheet('chain','./assets/chain.png',16,26);
 		//game.load.spritesheet('skellies', 'assets/skellies.png', 64, 64);
 
 		//load all of the images
