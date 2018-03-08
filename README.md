@@ -4,5 +4,4 @@ A scrapped game that Zach Thompson and I used to continue learning NodeJS and So
 
 ## Technologies Used
 * NodeJS
-* Socket.io
 * Phaser JS Library
